@@ -45,7 +45,7 @@ def main():
   # This temporary one is how we read the initial summary, as it doesn't follow the format of everything else on the page
   temp = []
   temp.append(searchTerm) # Section title
-  temp.append (re.findall(r'<p>(.+?)<(?:h[1-4]|/div)>', page, re.M + re.S)[0]) # Summary text ul
+  temp.append (re.findall(r'<p>(.+?)<(?:h[1-4]|/div)>', page, re.M + re.S)[0]) # Summary text
   sections.append(temp) # Add summary to final list
   page = page.replace('<div role="navigation" class="navbox"', '<h2>') + '<h2>' # Fix so last regex hits on page
   
