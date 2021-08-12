@@ -1,5 +1,6 @@
 import re
 import html, nltk
+import urllib
 import wikipedia
 
 URL_mask = r'^https:\/\/(.+)\.wikipedia.org\/wiki\/([^#]+)'
@@ -23,19 +24,19 @@ def main():
     if ('y' or 'yes') not in input("Continue? ").lower():
       return
 
-  # Set clean URL incase it contains any extra data
-  URL = searchTerm.group(0)
+  # Clean URL
+  URL =  urllib.parse.unquote(searchTerm.group(0))
   
   # Fetch page
   print("Fetching page...")
   try:
     wikipedia.set_lang(language)
     searchTerm = searchTerm.group(2).replace("_", " ") # Get search term from URL (in which case we need to add spaces)
-    page = html.unescape(wikipedia.WikipediaPage(searchTerm).html()) #
+    page = html.unescape(wikipedia.WikipediaPage(urllib.parse.unquote(searchTerm)).html()) #
   except Exception as e:
-    print(e)
+    print("Error: " + str(e))
     return
-
+  
   # Get each section
   print("Parsing...")
 
@@ -43,12 +44,13 @@ def main():
   
   # This temporary one is how we read the initial summary, as it doesn't follow the format of everything else on the page
   temp = []
-  temp.append(searchTerm) # Section title
-  temp.append (re.findall(r'</table>(.+?)<ul>', page, re.M + re.S)[0]) # Summary text
+  temp.append(urllib.parse.unquote(searchTerm)) # Section title
+  temp.append (re.findall(r'<p>(.+?)<(?:h[1-4]|/div)>', page, re.M + re.S)[0]) # Summary text ul
   sections.append(temp) # Add summary to final list
+  page = page.replace('<div role="navigation" class="navbox"', '<h2>') + '<h2>' # Fix so last regex hits on page
   
   # Now we can read everything else on the page
-  sections.extend( re.findall(r'<span class="mw-headline" id="(.+?)">.+?</h[1-4]>(.+?)<h[1-4]>', page, re.M + re.S) )
+  sections.extend( re.findall(r'<span class="mw-headline" id="(.+?)">.+?</h[1-4]>(.+?)<h[1-4]>', page, re.M + re.S) ) # 
 
   print("Printing data...")
   
@@ -102,7 +104,7 @@ def FindHyperlinks(raw_text, URL, language):
 
   # Parse hyperlinks for location, and linking text
   print("Hyperlinks:")
-  hyperlinks = re.findall('<a href="(.+?)".*?>(.*?)</a>', raw_text)
+  hyperlinks = re.findall('<a.+?href="(.+?)".*?>(.*?)</a>', raw_text)
   
   for hyperlink in hyperlinks:
     # Skip empty links
@@ -133,11 +135,4 @@ except:
   print("\n")
 
 main()
-
-
-
-
-
-
-
-
+print("\n")
