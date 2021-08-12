@@ -54,7 +54,7 @@ def main():
 
   print("Printing data...")
   
-  # Now we go through each section and read the data
+  # Loop through each section and read the data
   for section in sections:
     
     # Print section header
