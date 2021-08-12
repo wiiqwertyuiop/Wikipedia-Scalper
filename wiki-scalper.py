@@ -3,10 +3,9 @@ import html, nltk
 import urllib, wikipedia
 
 URL_mask = r'^https:\/\/(.+)\.wikipedia.org\/wiki\/([^#]+)'
-stopwords = set(nltk.corpus.stopwords.words('english')) # nltk supports other languages, so in the future this could be expanded to support the languages it supports
-
+  
 def main():
-
+  
   # Get wikipedia page
   URL = input("Please insert a Wikipedia page URL: ")
   searchTerm = re.match(URL_mask, URL)
@@ -19,10 +18,11 @@ def main():
   # See what language we are using
   language = searchTerm.group(1)
   if language != "en":
-    print("\nWarning! Only the English Wikipedia is supported currently.")
-    if ('y' or 'yes') not in input("Continue? ").lower():
-      return
-
+    print("\nWarning! Non-English Wikipedia is not fully supported, and may not behave as expected.")
+    if language not in language_dict:
+        if ('y' or 'yes') not in input("Not supported language. Continue? ").lower():
+          return
+	  
   # Clean URL
   URL =  urllib.parse.unquote(searchTerm.group(0))
   
@@ -30,6 +30,7 @@ def main():
   print("Fetching page...")
   try:
     wikipedia.set_lang(language)
+    stopwords = GetStopwords(language)
     searchTerm = urllib.parse.unquote(searchTerm.group(2).replace("_", " ")) # Get clean search term from URL with corrected spaces
     page = html.unescape(wikipedia.WikipediaPage(searchTerm).html())
   except Exception as e:
@@ -53,7 +54,7 @@ def main():
 
   print("Printing data...")
   
-  # Now we can go through each section and read the data
+  # Now we go through each section and read the data
   for section in sections:
     
     # Print section header
@@ -61,13 +62,13 @@ def main():
 
     # Check if this section has text we can look at
     if not section[1].isspace():
-      FindWordOccurence(section[1])
+      FindWordOccurence(section[1], stopwords)
       FindHyperlinks(section[1], URL, language)
     else:
       print("No body text for this section.")
 
 
-def FindWordOccurence(raw_text):
+def FindWordOccurence(raw_text, stopwords):
 
   # We have to manually remove any CSS
   # Then we can remove all the html and footnote tags
@@ -89,7 +90,7 @@ def FindWordOccurence(raw_text):
         word_tracker[word] = 0
       # Increase word count
       word_tracker[word] += 1
-      # If the current word is the high word counted, then it is the new high score 
+      # If the current word is the highest word counted, then it is the new high score 
       if word_tracker[word] > high_score:
         high_score = word_tracker[word] # Set the new high score
         high_score_list.clear() # We don't need any of the old words, because this is now the biggest
@@ -125,6 +126,40 @@ def CleanTags(text):
   # Clean HTML and footnote tags
   return re.sub(re.compile('[\[<].*?[>\]]'), '', text)
 
+# Language support
+language_dict = {
+  "en": "english",
+  "sv": "swedish",
+  "de": "german",
+  "nl": "dutch",
+  "no": "norwegian",
+  "da": "danish",
+  "simple": "english",
+  "nn": "norwegian",
+  "fr": "french",
+  "it": "italian",
+  "es": "spanish",
+  "pt": "portuguese",
+  "ro": "romanian",
+  "ru": "russian",
+  "arz": "arabic",
+  "ar": "arabic",
+  "tr": "turkish",
+  "id": "indonesian",
+  "fi": "finnish",
+  "hu": "hungarian",
+  "azb": "azerbaijani",
+  "az": "azerbaijani", 
+  "kk": "kazakh",
+  "ne": "nepali",
+}
+
+def GetStopwords(language):
+  if language in language_dict:
+    return set(nltk.corpus.stopwords.words(language_dict[language]))
+  else:
+    return set(nltk.corpus.stopwords.words("english"))
+  
 # On startup ensure we have needed files for nltk  
 try:
   nltk.data.find('tokenizers/punkt')
