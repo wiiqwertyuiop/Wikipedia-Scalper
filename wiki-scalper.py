@@ -1,7 +1,6 @@
 import re
 import html, nltk
-import urllib
-import wikipedia
+import urllib, wikipedia
 
 URL_mask = r'^https:\/\/(.+)\.wikipedia.org\/wiki\/([^#]+)'
 stopwords = set(nltk.corpus.stopwords.words('english')) # nltk supports other languages, so in the future this could be expanded to support the languages it supports
@@ -31,8 +30,8 @@ def main():
   print("Fetching page...")
   try:
     wikipedia.set_lang(language)
-    searchTerm = searchTerm.group(2).replace("_", " ") # Get search term from URL (in which case we need to add spaces)
-    page = html.unescape(wikipedia.WikipediaPage(urllib.parse.unquote(searchTerm)).html()) #
+    searchTerm = urllib.parse.unquote(searchTerm.group(2).replace("_", " ")) # Get clean search term from URL with corrected spaces
+    page = html.unescape(wikipedia.WikipediaPage(searchTerm).html())
   except Exception as e:
     print("Error: " + str(e))
     return
@@ -44,12 +43,12 @@ def main():
   
   # This temporary one is how we read the initial summary, as it doesn't follow the format of everything else on the page
   temp = []
-  temp.append(urllib.parse.unquote(searchTerm)) # Section title
+  temp.append(searchTerm) # Section title
   temp.append (re.findall(r'<p>(.+?)<(?:h[1-4]|/div)>', page, re.M + re.S)[0]) # Summary text ul
   sections.append(temp) # Add summary to final list
   page = page.replace('<div role="navigation" class="navbox"', '<h2>') + '<h2>' # Fix so last regex hits on page
   
-  # With that done, all the other sections follow the same format, and can be read all at once
+  # Now we can read everything else on the page
   sections.extend( re.findall(r'<span class="mw-headline" id="(.+?)">.+?</h[1-4]>(.+?)<h[1-4]>', page, re.M + re.S) ) # 
 
   print("Printing data...")
