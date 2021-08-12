@@ -49,7 +49,7 @@ def main():
   sections.append(temp) # Add summary to final list
   page = page.replace('<div role="navigation" class="navbox"', '<h2>') + '<h2>' # Fix so last regex hits on page
   
-  # Now we can read everything else on the page
+  # With that done, all the other sections follow the same format, and can be read all at once
   sections.extend( re.findall(r'<span class="mw-headline" id="(.+?)">.+?</h[1-4]>(.+?)<h[1-4]>', page, re.M + re.S) ) # 
 
   print("Printing data...")
