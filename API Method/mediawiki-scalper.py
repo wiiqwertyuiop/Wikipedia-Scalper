@@ -79,16 +79,16 @@ def main():
             return
 
         # If we reach the last section break 
-        if 'parse' not in data:
-            return
-            
+        if 'parse' not in data: return
+        
+        # Short hand
         data = data['parse']
         
-        if section == 0:
-          print("\n== " + data['title'] + " ==\n")
-        else:
-          print("\n== " + data['sections'][0]['line'] + " ==\n")
+        # If this is the summary section, print the title, otherwise use the section name
+        if section == 0: print("\n== " + data['title'] + " ==\n")
+        else: print("\n== " + data['sections'][0]['line'] + " ==\n")
         
+        # Find most occuring words in section
         FindWordOccurence(data['text']['*'], set(nltk.corpus.stopwords.words(language_dict[language])))
         
         # Do hyperlinks
@@ -96,8 +96,7 @@ def main():
             print("Hyperlinks:")
             
         for links in data['links']:
-            if links['ns'] != 0:
-                continue
+            if links['ns'] != 0: continue
             print("https://" + language + ".wikipedia.org/wiki/" + links['*'].replace(" ", "_"))
             
         for externallinks in data['externallinks']:
