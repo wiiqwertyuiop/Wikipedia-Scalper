@@ -2,6 +2,18 @@ import re
 import nltk, html
 import requests
 
+'''
+Takes in a Wikipedia link and for each section,
+prints out the title of the section, 
+the most frequent words in the section
+that are not considered “stop words”, 
+and lists every hyperlink in the section.
+'''
+
+#
+# This version queries and makes use of the mediawiki API
+# 
+
 # Language support
 language_dict = {
   "en": "english",
@@ -52,7 +64,10 @@ def main():
         return
     
     # API Call URL
-    API_URL = "https://" + language + ".wikipedia.org/w/api.php?action=parse&format=json&prop=text|links|externallinks|sections&disabletoc=1&disablestylededuplication=1&page=" + searchTerm.group(2) + "&section="
+    API_URL = ("https://" + language
+    + ".wikipedia.org/w/api.php?action=parse&format=json&prop=text|links|externallinks|sections&disabletoc=1&disablestylededuplication=1&page="
+    + searchTerm.group(2)
+    + "&section=")
     
     # Don't let loop go on forever (I doubt there is a wikipedia page with over 500 sections)
     for section in range(500):
@@ -122,7 +137,7 @@ def FindWordOccurence(raw_text, stopwords):
 
   if high_score == 0: return
   print("The word(s) " + str(high_score_list) + " showed up most frequntly, occuring " + str(high_score) + " times.\n")
-
+    
 def CleanTags(text):
   
   # Get rid of CSS
@@ -141,7 +156,6 @@ def CleanTags(text):
   text = re.sub(re.compile('<\!--.+?-->', re.S), '', text)
   # Fix \n and \u
   text = re.sub(re.compile('\\[u|n]'), ' ', text)
-  
   return html.unescape(text)
 
 # On startup ensure we have needed files for nltk  
@@ -153,5 +167,4 @@ except:
   print("\n")
   
 main()
-
 print("\nFinished.")
