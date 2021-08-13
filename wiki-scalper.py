@@ -3,7 +3,7 @@ import html, nltk
 import urllib, wikipedia
 
 #
-# This version takes the full HTML page, and use regular expressions to get the data we need
+# This version takes the full HTML page, and uses regular expressions to get the data we need
 # 
 
 '''
