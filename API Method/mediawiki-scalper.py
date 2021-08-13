@@ -131,8 +131,8 @@ def FindWordOccurence(raw_text, stopwords):
       if word_tracker[word] >= high_score:
         high_score_list.append(word)
 
-  if high_score == 0: return
-  print("The word(s) " + str(high_score_list) + " showed up most frequntly, occuring " + str(high_score) + " times.\n")
+  if high_score != 0:
+      print("The word(s) " + str(high_score_list) + " showed up most frequntly, occuring " + str(high_score) + " times.\n")
     
 def CleanTags(text):
   text = re.sub(re.compile('<style.+?<\/style>'), '', text) # Get rid of CSS
