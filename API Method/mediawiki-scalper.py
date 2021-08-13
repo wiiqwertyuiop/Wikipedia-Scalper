@@ -104,8 +104,7 @@ def main():
 
 def FindWordOccurence(raw_text, stopwords):
   
-  # We have to manually remove any CSS
-  # Then we can remove all the html and footnote tags
+  # Clean text
   text = CleanTags(raw_text)
   
   # Remove any punctionation not in between words, and split the text
