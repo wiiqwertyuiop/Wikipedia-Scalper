@@ -76,11 +76,11 @@ def main():
             data = requests.get(API_URL + str(section)).json()
         except Exception as e:
             print(e)
-            break
+            return
 
         # If we reach the last section break 
         if 'parse' not in data:
-            break
+            return
             
         data = data['parse']
         
