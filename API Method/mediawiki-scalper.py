@@ -55,8 +55,6 @@ def main():
     while not searchTerm:
         URL = input("Not a valid Wikipedia link.\n\nPlease insert a valid Wikipedia page URL: ")
         searchTerm = re.search(URL_mask, URL)
-
-    #URL =  urllib.parse.unquote(searchTerm.group(0))
     
     # See what language we are using
     language = searchTerm.group(1)
