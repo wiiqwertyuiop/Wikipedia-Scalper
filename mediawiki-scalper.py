@@ -122,10 +122,6 @@ def FindWordOccurence(raw_text, stopwords):
 
   if high_score == 0: return
   print("The word(s) " + str(high_score_list) + " showed up most frequntly, occuring " + str(high_score) + " times.\n")
-    
-def FindHyperlinks():
-  return
-
 
 def CleanTags(text):
   
