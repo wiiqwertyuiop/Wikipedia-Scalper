@@ -169,4 +169,4 @@ except:
   print("\n")
 
 main()
-print("\n")
+print("")
