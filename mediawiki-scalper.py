@@ -2,6 +2,10 @@ import re
 import nltk, html
 import requests
 
+#
+# This version queries and makes use of the mediawiki API
+# 
+
 '''
 Takes in a Wikipedia link and for each section,
 prints out the title of the section, 
@@ -9,10 +13,6 @@ the most frequent words in the section
 that are not considered “stop words”, 
 and lists every hyperlink in the section.
 '''
-
-#
-# This version queries and makes use of the mediawiki API
-# 
 
 # Language support
 language_dict = {
