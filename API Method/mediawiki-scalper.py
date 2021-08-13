@@ -140,23 +140,14 @@ def FindWordOccurence(raw_text, stopwords):
   print("The word(s) " + str(high_score_list) + " showed up most frequntly, occuring " + str(high_score) + " times.\n")
     
 def CleanTags(text):
-  
-  # Get rid of CSS
-  text = re.sub(re.compile('<style.+?<\/style>'), '', text)
-  # Get rid of section headers
-  text = re.sub(re.compile('<h[1-4]>.+?<\/h[1-4]'), '', text)
-  # Get rid of infobox
-  text = re.sub(re.compile('<table.+?class=\\"infobox.+?</table>', re.S), '', text)
-  # Get rid of footnotes
-  text = re.sub(re.compile('<sup.+?class=\\"reference\\".+?<\/sup>'), '', text)
-  # Get rid of reference section
-  text = re.sub(re.compile('<ol class="references">.+?<\/ol>', re.S), '', text)
-  # Get rid of HTML tags
-  text = re.sub(re.compile('<.+?>'), '', text)
-  # Get rid of HTML comments
-  text = re.sub(re.compile('<\!--.+?-->', re.S), '', text)
-  # Fix \n and \u
-  text = re.sub(re.compile('\\[u|n]'), ' ', text)
+  text = re.sub(re.compile('<style.+?<\/style>'), '', text) # Get rid of CSS
+  text = re.sub(re.compile('<h[1-4]>.+?<\/h[1-4]'), '', text) # Get rid of section headers
+  text = re.sub(re.compile('<table.+?class=\\"infobox.+?</table>', re.S), '', text) # Get rid of infobox
+  text = re.sub(re.compile('<sup.+?class=\\"reference\\".+?<\/sup>'), '', text) # Get rid of footnotes
+  text = re.sub(re.compile('<ol class="references">.+?<\/ol>', re.S), '', text) # Get rid of reference section
+  text = re.sub(re.compile('<.+?>'), '', text) # Get rid of HTML tags
+  text = re.sub(re.compile('<\!--.+?-->', re.S), '', text) # Get rid of HTML comments
+  text = re.sub(re.compile('\\[u|n]'), ' ', text) # Fix \n and \u
   return html.unescape(text)
 
 # On startup ensure we have needed files for nltk  
