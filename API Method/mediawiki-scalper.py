@@ -77,7 +77,7 @@ def main():
             print(e)
             return
 
-        # If we reach the last section break 
+        # If we reach the last section end
         if 'parse' not in data: return
         
         # Short hand
