@@ -2,6 +2,18 @@ import re
 import html, nltk
 import urllib, wikipedia
 
+#
+# This version takes the full HTML page, and use regular expressions to get the data we need
+# 
+
+'''
+Takes in a Wikipedia link and for each section,
+prints out the title of the section, 
+the most frequent words in the section
+that are not considered “stop words”, 
+and lists every hyperlink in the section.
+'''
+
 URL_mask = r'^https:\/\/(.+)\.wikipedia.org\/wiki\/([^#]+)'
   
 def main():
