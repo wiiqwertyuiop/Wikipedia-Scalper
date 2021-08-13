@@ -4,7 +4,7 @@ import requests
 
 #
 # I provided two different methods of accomplishing the goal:
-# This version queries and makes use of the mediawiki API
+# This version queries and makes use of the MediaWiki API
 # 
 
 '''
