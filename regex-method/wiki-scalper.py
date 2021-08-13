@@ -10,8 +10,7 @@ import urllib, wikipedia
 '''
 Takes in a Wikipedia link and for each section,
 prints out the title of the section, 
-the most frequent words in the section
-that are not considered “stop words”, 
+the most frequent words in the section that are not considered “stop words”, 
 and lists every hyperlink in the section.
 '''
 
